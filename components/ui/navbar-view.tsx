@@ -60,9 +60,10 @@ const AuthLink = ({ open, setOpen, user }: ButtonProps & { user?: NavbarProps["u
   return (
     <div className="flex items-center gap-2 ">
       <div className="hidden md:flex gap-2  rounded-lg px-2 py-1">
-        <button className="rounded-[8px] bg-secondary border-secondary text-[13px] font-semibold px-6 py-1.5 cursor-pointer">
+         <Link
+          href={"/free"} className="rounded-[8px] bg-secondary border-secondary text-[13px] font-semibold px-6 py-1.5 cursor-pointer">
           Try one
-        </button>
+        </Link>
         <Link
           href={"/login"}
           className="rounded-[8px] text-center cursor-pointer   bg-primary border-primary text-[13px] font-semibold px-4 text-background py-1.5">

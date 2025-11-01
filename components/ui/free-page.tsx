@@ -1,15 +1,24 @@
 "use client";
 
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Brain, Loader, LoaderCircle, X } from "lucide-react";
 import React, { useState } from "react";
 import { ButtonComp, ButtonProps, ButtonSections } from "../pre-build-comp/buttons-part";
-
 import { useRef } from "react";
+import { Input } from "./input";
+import { Card, CardTitle } from "./card";
+import { toast } from "sonner";
 
 export default function FreePage() {
+  const [showPreview, setShowPreview] = useState(false);
+  
+  const [generatedCode, setGeneratedCode] = useState<string>("");
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [buttons, setButtons] = useState<ButtonProps[]>([]);
   const [show, setShow] = useState<boolean>(false);
-  
+  const [selectedButton, setSelectedButton] = useState<string | null>(null);
+  const [hasDragged, setHasDragged] = useState(false);
+  const [modalOpen, setmodelOpen] = useState<boolean>(false);
+  const [newtext, setNewText] = useState<string>("");
   const [dragging, setDragging] = useState<{
     id: string;
     offsetX: number;
@@ -33,6 +42,7 @@ export default function FreePage() {
     setButtons((prev) => [...prev, newbtn]);
   };
   const handleMouse = (buttonId: string, event: React.MouseEvent) => {
+    setHasDragged(false);
     const canvasRect = canvasRef.current?.getBoundingClientRect();
     if (!canvasRect) return;
     const mouseX = event.clientX - canvasRect.left;
@@ -46,6 +56,7 @@ export default function FreePage() {
 
   const handleMouseMove = (event: React.MouseEvent) => {
     if (!dragging) return;
+    setHasDragged(true);
     const canvasRect = canvasRef.current?.getBoundingClientRect();
     if (!canvasRect) return;
 
@@ -67,36 +78,135 @@ export default function FreePage() {
       })
     );
   };
-  const handleMouseUp = () => {
-    setDragging(null); // set  null when use leave mouse 
+  const CloseModle = () => {
+    setmodelOpen((prev) => !prev);
   };
+  const ClosePreivew=()=>{
+    setShowPreview((prev)=>!prev)
+  }
+  const handleMouseUp = () => {
+    if (dragging && !hasDragged) {
+      const button = buttons.find((btn) => btn.id == dragging.id);
+      if (button) {
+        setNewText(button.props.text); // set current props text to input box
+      }
+      setSelectedButton(dragging.id); // pass the current dragging Id
+      setmodelOpen(true);
+    }
+    setDragging(null); // set  null when uset leave mouse
+  };
+
+  // handle the text edit
+  const handleTextEdit = (text: string) => {
+    if (!selectedButton) return;
+    setButtons((prev) =>
+      prev.map((btn) =>
+        btn.id === selectedButton ? { ...btn, props: { ...btn.props, text: text } } : btn
+      )
+    );
+  };
+  //handle delete part the button from canvas
+  const handleDeleteButton = (button_id: string) => {
+    // get the button as the paramemter
+    if (!selectedButton) return;
+    setButtons((prev) => prev.filter((btn) => btn.id !== button_id));
+    setSelectedButton(null);
+    setmodelOpen(false);
+  };
+
+  // generat the Page 
+  const handleGenerateCode = async () => {
+    setIsGenerating(true);
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ buttons }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Something went wrong on the server");
+      }
+      toast.success("Your Code Generated Successfully");
+       console.log(data.code)
+      setGeneratedCode(data.code);
+      setShowPreview(true); 
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message || "Failed to generate");
+      } else {
+        toast.error("An unexpected error occurred");
+      }
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return (
     <div
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       ref={canvasRef}
       className=" p-2  relative  min-h-screen ">
+      <button
+        onClick={handleGenerateCode}
+        disabled={buttons.length === 0 || isGenerating}
+        className="absolute right-2 top-2 rounded-3xl px-5 py-1.5 
+      bg-neutral-800/80 border border-neutral-700 
+      text-secondary-foreground font-semibold text-[12px]
+      flex gap-2 items-center cursor-pointer 
+      shadow-[0_4px_8px_rgba(0,0,0,0.4),_inset_0_1px_1px_rgba(255,255,255,0.1)] 
+      hover:shadow-[0_6px_12px_rgba(0,0,0,0.5),_inset_0_1px_1px_rgba(255,255,255,0.15)] 
+      transition-all duration-200 ease-out">
+        <>
+          {isGenerating ? (
+            <p className="flex gap-2 items-center ">
+              <span className="">Generating</span>
+              <Loader className="size-3  text-neutral-500 animate-spin" />
+            </p>
+          ) : (
+            <p className="flex gap-1 items-center ">
+              <Brain className="size-4 text-neutral-400" />
+              <span>Generate code</span>{" "}
+            </p>
+          )}
+        </>
+      </button>
       {buttons.map((btn) => (
         <ButtonComp key={btn.id} button={btn} onMouseDown={handleMouse} />
       ))}
+      <PreviewModal 
+        setShowPreview={ClosePreivew} 
+        showPreview={showPreview} 
+        generatedCode={generatedCode} 
+        />
+      <Modle
+        modalOpen={modalOpen}
+        setModelOpen={CloseModle}
+        onSave={handleTextEdit}
+        text={newtext}
+        setNewText={setNewText} // pass the text
+        onDelete={handleDeleteButton}
+        buttonId={selectedButton || " "} // pass the button_id for delete i
+      />
       <button
         onClick={() => setShow((prev) => !prev)}
         className="rounded-md  absolute   bg-neutral-800/40   shadow border-neutral-900  cursor-pointer px-2 py-1">
         {show ? <ArrowLeft /> : <ArrowRight />}{" "}
       </button>
       {show && (
-        <div className="h-full  w-56 rounded-md   bg-neutral-900 border-zinc-900/80 border  flex  items-end  flex-col gap-1 absolute top-0 left-0  z-20">
+        <div className="min-h-screen  sm:w-60 lg:w-72 rounded-md   bg-neutral-900 border-zinc-900/80 border  flex  items-end  flex-col gap-1 absolute top-0 left-0  z-20">
           <button
             onClick={() => setShow((prev) => !prev)}
             className="rounded-md   bg-neutral-800/40 16 items-end  shadow border-neutral-900  cursor-pointer px-2 py-1 m-1">
             {show ? <ArrowLeft /> : <ArrowRight />}{" "}
           </button>
-          <div className=" rounded-md   bg-zinc-900  overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-900 h-full  flex  items-end  flex-col gap-1 ">
+          <div className=" rounded-md  w-full    flex  items-end  flex-col gap-1 ">
             <p className="text-md font-bold  px-1.5 py-1 flex  text-neutral-300  items-start w-full">
               Buttons
             </p>
             <ButtonSections addbtn={addbtn} />
-            <div className="w-full  flex flex-col  gap-1 ">
+            <div className="w-full  flex flex-col  border gap-1 ">
               <p className="w-full font-bold text-neutral-300 px-1.5 py-1 flex text-md  items-start ">
                 Navbars
               </p>
@@ -104,8 +214,103 @@ export default function FreePage() {
           </div>
         </div>
       )}
+
+      {generatedCode && (
+        <div className="fixed bottom-4 right-4 bg-neutral-900 border border-neutral-700 p-4 rounded-lg max-w-2xl max-h-96 overflow-auto">
+          <pre className="text-sm text-neutral-300">
+            <code>{generatedCode}</code>
+          </pre>
+        </div>
+      )}
     </div>
   );
 }
 
+interface ModleProps {
+  buttonId: string;
+  text: string;
+  modalOpen: boolean;
+  setModelOpen: () => void;
+  onSave: (text: string) => void;
+  setNewText: React.Dispatch<React.SetStateAction<string>>;
+  onDelete: (id: string) => void;
+}
+const Modle = ({
+  modalOpen,
+  setModelOpen,
+  text,
+  setNewText,
+  onSave,
+  onDelete,
+  buttonId,
+}: ModleProps) => {
+  if (!modalOpen) return null;
+  return (
+    <>
+      {" "}
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-40">
+          <Card className="bg-neutral-900/80 border border-neutral-900 rounded-xl p-2 flex max-w-[22rem]  mx-auto w-full relative ">
+            <CardTitle className="text-neutral-300  text-[14px] font-bold mt-2">
+              Change Text
+            </CardTitle>
+            <Input
+              value={text}
+              onChange={(e) => setNewText(e.target.value)}
+              className="text-neutral-400 text-[16px]"
+            />
+            <button
+              onClick={setModelOpen}
+              className=" absolute  top-1 right-1 bg-neutral-800/40 rounded-full p-1 flex items-center cursor-pointer hover:bg-neutral-700/60 transition-all duration-300 ease-in-out ">
+              <X className="size-5 " />
+            </button>
+            <div className="flex  gap-1">
+              <button
+                onClick={() => {
+                  onSave(text);
+                  setModelOpen();
+                }}
+                className="text-primary-foreground  font-semibold justify-center cursor-pointer w-full rounded-lg  p-1 flex items-center bg-primary hover:bg-primary/70  transition-all ease-in-out duration-300">
+                Save
+              </button>
+              <button
+                onClick={() => onDelete(buttonId)}
+                className="text-secondary-foreground  font-semibold justify-center cursor-pointer w-full rounded-lg  p-1 flex items-center bg-red-500/70  hover:bg-red-600/50 transition-all ease-in-out duration-300">
+                Delete
+              </button>
+            </div>
+          </Card>
+        </div>
+      )}
+    </>
+  );
+};
 
+
+
+interface PropsModel{
+  showPreview:boolean,
+  setShowPreview:()=>void
+  generatedCode:string
+}
+const PreviewModal = ({showPreview,setShowPreview,generatedCode}:PropsModel) => {
+  if (!showPreview) return null;
+  
+  return (
+    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+      <div className="bg-neutral-900 rounded-lg w-full max-w-6xl h-[90vh] flex flex-col">
+        <div className="flex justify-between items-center p-4 border-b border-neutral-700">
+          <h2 className="text-xl font-bold text-neutral-200">Preview</h2>
+          <button onClick={setShowPreview}>
+            <X className="text-neutral-400" />
+          </button>
+        </div>
+        <iframe
+          srcDoc={generatedCode}
+          sandbox="allow-scripts"
+          className="flex-1 w-full bg-white"
+        />
+      </div>
+    </div>
+  );
+};
