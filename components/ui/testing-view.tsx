@@ -1,7 +1,7 @@
-export const ColletionsPage=()=>{
+export const TemplatesPage=()=>{
     return(
         <div>
-        Collections Page
+       
         </div>
     )
 }

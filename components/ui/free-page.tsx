@@ -4,13 +4,14 @@ import { ArrowLeft, ArrowRight, Brain, Loader, LoaderCircle, X } from "lucide-re
 import React, { useState } from "react";
 import { ButtonComp, ButtonProps, ButtonSections } from "../pre-build-comp/buttons-part";
 import { useRef } from "react";
-import { Input } from "./input";
-import { Card, CardTitle } from "./card";
 import { toast } from "sonner";
+import { Modle } from "./modle.view";
+import { Textarea } from "./textarea";
+
 
 export default function FreePage() {
   const [showPreview, setShowPreview] = useState(false);
-  
+  const [userPrompt ,setUserPrompt] =useState<string>("");
   const [generatedCode, setGeneratedCode] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [buttons, setButtons] = useState<ButtonProps[]>([]);
@@ -24,6 +25,8 @@ export default function FreePage() {
     offsetX: number;
     offsetY: number;
   } | null>(null);
+
+ 
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const addbtn = async (text: string, variant: "primary" | "secondary") => {
@@ -121,14 +124,14 @@ export default function FreePage() {
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ buttons }),
+        body: JSON.stringify({ userPrompt }),
       });
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error || "Something went wrong on the server");
       }
       toast.success("Your Code Generated Successfully");
-       console.log(data.code)
+      console.log("Code----------->",generatedCode)
       setGeneratedCode(data.code);
       setShowPreview(true); 
     } catch (error: unknown) {
@@ -148,30 +151,37 @@ export default function FreePage() {
       onMouseUp={handleMouseUp}
       ref={canvasRef}
       className=" p-2  relative  min-h-screen ">
-      <button
-        onClick={handleGenerateCode}
-        disabled={buttons.length === 0 || isGenerating}
-        className="absolute right-2 top-2 rounded-3xl px-5 py-1.5 
-      bg-neutral-800/80 border border-neutral-700 
-      text-secondary-foreground font-semibold text-[12px]
-      flex gap-2 items-center cursor-pointer 
-      shadow-[0_4px_8px_rgba(0,0,0,0.4),_inset_0_1px_1px_rgba(255,255,255,0.1)] 
-      hover:shadow-[0_6px_12px_rgba(0,0,0,0.5),_inset_0_1px_1px_rgba(255,255,255,0.15)] 
-      transition-all duration-200 ease-out">
+        <div className="flex   items-end absolute  bottom-8 gap-2   right-0   w-full">
+         <div className=" flex   items-center gap-1 max-w-2xl mx-auto w-full ">
+          <Textarea 
+           value={userPrompt}
+           onChange={(e)=>setUserPrompt(e.target.value)}
+          placeholder={`What do you want to build today `} className="rounded-xl flex flex-1" />
+          <button
+           onClick={handleGenerateCode}
+        className="  right-0 rounded-2xl px-5 py-4  bg-neutral-800/80 border border-neutral-800/80 
+        text-secondary-foreground font-semibold text-[12px]
+        flex gap-2 items-center cursor-pointer 
+        shadow-[0_4px_8px_rgba(0,0,0,0.4),_inset_0_1px_1px_rgba(255,255,255,0.1)] 
+        hover:shadow-[0_6px_12px_rgba(0,0,0,0.5),_inset_0_1px_1px_rgba(255,255,255,0.15)] 
+        transition-all duration-200 ease-out">
         <>
           {isGenerating ? (
             <p className="flex gap-2 items-center ">
               <span className="">Generating</span>
-              <Loader className="size-3  text-neutral-500 animate-spin" />
+              <Loader className="size-3  text-neutral-400 animate-spin" />
             </p>
           ) : (
-            <p className="flex gap-1 items-center ">
-              <Brain className="size-4 text-neutral-400" />
+            <p className="flex gap-1 items-center">
+              <Brain className="size-4 text-neutral-400"/>
               <span>Generate code</span>{" "}
             </p>
           )}
         </>
       </button>
+          
+          </div>
+          </div>
       {buttons.map((btn) => (
         <ButtonComp key={btn.id} button={btn} onMouseDown={handleMouse} />
       ))}
@@ -225,66 +235,6 @@ export default function FreePage() {
     </div>
   );
 }
-
-interface ModleProps {
-  buttonId: string;
-  text: string;
-  modalOpen: boolean;
-  setModelOpen: () => void;
-  onSave: (text: string) => void;
-  setNewText: React.Dispatch<React.SetStateAction<string>>;
-  onDelete: (id: string) => void;
-}
-const Modle = ({
-  modalOpen,
-  setModelOpen,
-  text,
-  setNewText,
-  onSave,
-  onDelete,
-  buttonId,
-}: ModleProps) => {
-  if (!modalOpen) return null;
-  return (
-    <>
-      {" "}
-      {modalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-40">
-          <Card className="bg-neutral-900/80 border border-neutral-900 rounded-xl p-2 flex max-w-[22rem]  mx-auto w-full relative ">
-            <CardTitle className="text-neutral-300  text-[14px] font-bold mt-2">
-              Change Text
-            </CardTitle>
-            <Input
-              value={text}
-              onChange={(e) => setNewText(e.target.value)}
-              className="text-neutral-400 text-[16px]"
-            />
-            <button
-              onClick={setModelOpen}
-              className=" absolute  top-1 right-1 bg-neutral-800/40 rounded-full p-1 flex items-center cursor-pointer hover:bg-neutral-700/60 transition-all duration-300 ease-in-out ">
-              <X className="size-5 " />
-            </button>
-            <div className="flex  gap-1">
-              <button
-                onClick={() => {
-                  onSave(text);
-                  setModelOpen();
-                }}
-                className="text-primary-foreground  font-semibold justify-center cursor-pointer w-full rounded-lg  p-1 flex items-center bg-primary hover:bg-primary/70  transition-all ease-in-out duration-300">
-                Save
-              </button>
-              <button
-                onClick={() => onDelete(buttonId)}
-                className="text-secondary-foreground  font-semibold justify-center cursor-pointer w-full rounded-lg  p-1 flex items-center bg-red-500/70  hover:bg-red-600/50 transition-all ease-in-out duration-300">
-                Delete
-              </button>
-            </div>
-          </Card>
-        </div>
-      )}
-    </>
-  );
-};
 
 
 

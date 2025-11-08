@@ -1,23 +1,16 @@
 "use client";
 import React, { useState } from "react";
 import { Menu, Sun, Moon } from "lucide-react";
-
+import { UserProps } from "@/lib/props";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 
-interface NavbarProps {
-  user: {
-    name: string | null;
-    email: string;
-    image?: string | null;
-  } | null;
-}
 
 interface ButtonProps {
   open: boolean;
   setOpen: () => void;
 }
-export default function Navbar({ user }: NavbarProps) {
+export default function Navbar({ user }: UserProps) {
   const [open, setOpen] = useState<boolean>(false);
   const { theme, setTheme } = useTheme();
 
@@ -46,7 +39,7 @@ export default function Navbar({ user }: NavbarProps) {
   );
 }
 
-const AuthLink = ({ open, setOpen, user }: ButtonProps & { user?: NavbarProps["user"] }) => {
+const AuthLink = ({ open, setOpen, user }: ButtonProps & { user?: UserProps["user"] }) => {
   if (user) {
     return (
       <div className="flex  items-center gap-2 ">

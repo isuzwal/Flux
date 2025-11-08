@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getGroqChatCompletion,createFullPagePrompt } from '@/lib/groq';
+import { getGroqChatCompletion } from '@/lib/groq';
+import { createComponentPrompt } from '@/lib/groq/prompt';
 
 export async function POST(request: NextRequest) {
   try {
     // came from the user Request
-    const { buttons } = await request.json();
+    const { buttons ,userPrompt} = await request.json();
     
-    const prompt = createFullPagePrompt(buttons);
+    const prompt = createComponentPrompt(userPrompt);
     const completion = await getGroqChatCompletion(prompt);
     const code = completion.choices[0]?.message?.content || "";
     
