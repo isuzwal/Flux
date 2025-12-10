@@ -3,7 +3,6 @@ import { createAuthClient } from "better-auth/react"
 import { useRouter } from "next/navigation";
 
 export const authClient =  createAuthClient();
- const router=useRouter()
 
 // Loging with google 
 export const LoginGoogle=async ()=>{
@@ -19,7 +18,8 @@ export const LogoOutGoogle=async()=>{
 }
 
 // Logout with eamil and password
-export const EmailLogout=async()=>{
+// passes the router
+export const EmailLogout=async(router: ReturnType<typeof useRouter>)=>{
  await authClient.signOut({
     fetchOptions:{
         onSuccess:()=>{
