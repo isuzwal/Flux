@@ -1,16 +1,17 @@
 "use client"
 import Link from "next/link"
 
-import {  LockIcon, MailIcon } from "lucide-react"
+import {  LockIcon, MailIcon, User } from "lucide-react"
 import { useState } from "react"
 // import { authClient } from "@/lib/client"
 
 
 
-export const LoginPage= ()=>{
+export const RegisterPage= ()=>{
      
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
+    const [name,setName]=useState("");
 //    const [laoding,setLoading]=useState(false);
 //    const [error,setError]=useState<string |null>(null);
 
@@ -47,13 +48,22 @@ export const LoginPage= ()=>{
             </div>
             <div className=" flex justify-center flex-col gap-5">
                 <div className="flex flex-col items-center text-center gap-2">
-                    <div className="flex w-full justify-end">
+                    <h1 className="font-semibold font-sans text-lg lg:text-xl tracking-tight">Be part of the community</h1>
+                    <div className="flex items-center gap-1 text-muted-foreground text-sm">
+                        <span>Connect and grow together</span>
+                        <Link href="/login" className="text-primary text-xs underline underline-offset-4 hover:text-primary/80 transition">Login</Link>
                     </div>
-                    <h1 className="font-semibold font-sans text-lg lg:text-xl tracking-tight">Welcome back</h1>
-                    <p className="text-muted-foreground text-sm flex gap-1 items-center">Sign in to continue your journey  <Link href="/register" className="text-primary text-xs underline underline-offset-4 hover:text-primary/80 transition">Register</Link></p>
-                      
                 </div>
                 <div className="flex gap-2 flex-col ">
+                     <div>
+                        <label className="font-medium font-sans text-sm mb-2  border-[1.5px] dark:border-neutral-800 h-full w-full   flex gap-1 rounded-lg dark:bg-neutral-800/50 bg-white border-neutral-100 ">
+                            <User className="size-5 text-neutral-500 ml-3 mt-2"/>
+                         <input value={name} type="text" onChange={(e)=>setName(e.target.value)} 
+                          className="  py-1.5 px-2 max-w-md w-full mx-auto  placeholder:text-neutral-500 font-medium text-[16px]  focus-visible:outline-none focus-visible:ring-0" placeholder="isuzwal" 
+                         />
+
+                        </label>
+                    </div>
                     <div>
                         <label className="font-medium font-sans text-sm mb-2  border-[1.5px] dark:border-neutral-800 h-full w-full   flex gap-1 rounded-lg dark:bg-neutral-800/50 bg-white border-neutral-100 ">
                             <MailIcon className="size-5 text-neutral-500 ml-3 mt-2"/>
@@ -74,7 +84,8 @@ export const LoginPage= ()=>{
                     </div>
                 </div>
                 <div className="w-full  ">
-                   <button className="w-full rounded-md bg-primary cursor-pointer  text-primary-foreground font-semibold font-sans py-2 transition hover:bg-primary/90 focus:outline-none focus:ring-0">Sign in</button>
+                   <button className="w-full rounded-md bg-primary text-primary-foreground font-sans py-2 transition hover:bg-primary/90 focus:outline-none focus:ring-0 cursor-pointer font-semibold">Join the community</button>
+
                 </div>
 
                 <div className="flex items-center gap-2 my-2">
