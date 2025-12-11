@@ -85,7 +85,7 @@ export const LoginPage= ()=>{
                 <div className=" flex gap-2 justify-center items-center">
                  <button  className="rounded-md border-[1.5px] dark:border-neutral-800 dark:bg-neutral-900 shadow-[inset_1px_2px_4px_rgba(220,220,220,0.5)] bg-slate-50 border-slate-50 flex justify-center items-center  py-2 px-4   dark:shadow-[inset_1px_3px_6px_rgba(45,45,50,0.5)] transition-all duration-300 gap-2  cursor-pointer dark:hover:bg-neutral-900/80  w-1/2 ">
                 <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-                <g fill="none" fill-rule="evenodd" clip-rule="evenodd">
+                <g fill="none" fillRule="evenodd" clipRule="evenodd">
                 <path fill="#F44336" d="M7.209 1.061c.725-.081 1.154-.081 1.933 0a6.57 6.57 0 0 1 3.65 1.82a100 100 0 0 0-1.986 1.93q-1.876-1.59-4.188-.734q-1.696.78-2.362 2.528a78 78 0 0 1-2.148-1.658a.26.26 0 0 0-.16-.027q1.683-3.245 5.26-3.86" opacity=".987"/>
                 <path fill="#FFC107" d="M1.946 4.92q.085-.013.161.027a78 78 0 0 0 2.148 1.658A7.6 7.6 0 0 0 4.04 7.99q.037.678.215 1.331L2 11.116Q.527 8.038 1.946 4.92" opacity=".997"/>
                 <path fill="#448AFF" d="M12.685 13.29a26 26 0 0 0-2.202-1.74q1.15-.812 1.396-2.228H8.122V6.713q3.25-.027 6.497.055q.616 3.345-1.423 6.032a7 7 0 0 1-.51.49" opacity=".999"/>

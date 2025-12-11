@@ -3,7 +3,10 @@ import Link from "next/link"
 
 import {  LockIcon, MailIcon, User } from "lucide-react"
 import { useState } from "react"
-// import { authClient } from "@/lib/client"
+import { authClient, LoginGoogle } from "@/lib/client"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
+
 
 
 
@@ -12,28 +15,40 @@ export const RegisterPage= ()=>{
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
     const [name,setName]=useState("");
-//    const [laoding,setLoading]=useState(false);
-//    const [error,setError]=useState<string |null>(null);
+   const [laoding,setLoading]=useState(false);
+ 
+   const router=useRouter();
+    const handleRegister=async(event: React.FormEvent<HTMLFormElement>)=>{
+        event?.preventDefault();
+        setLoading(true);
+         try{
+            const response=  await authClient.signUp.email({
+                 name:name.trim(),
+                 email:email.trim(),
+                 password:password
+                })
+                 if(response.error){
+                    console.log("Registration error:",response.error);
+                    toast.error(response?.error?.message || "Registration failed. Please try again.");
+                    return
+                 }
+                 toast.success("Registration successful ");
+                 setTimeout((()=>{
+                     router.push("/login");
+                 }),1000)
+            }catch(err){
+                const error=err as Error;
+                toast.error(error.message || "Registration failed. Please try again.");
+            }
+            finally{
+                setLoading(false);
+            }
+    }
 
-    // const handleLogin=async()=>{
-    //     setLoading(true);
-    //      try{
-    //          const {data,error}=await authClient.signIn.emailPassword({
-    //              email:email,
-    //              password:password
-    //             })
-    //             if(error){
-    //              setError(error.message)
-    //              return
-    //             }
-    //         }catch(err){
-    //             const error=err as Error;
-    //             setError( error.message || "Login failed. Please try again.")
-    //         }finally{
-    //             setLoading(false);
-    //         }
-    // }
 
+    const GoogleSetup=async()=>{
+        await LoginGoogle()
+    }
     return (
         <div className=" relative border min-h-screen flex items-center justify-center lg:p-0 p-2 dark:bg-zinc-900 bg-neutral-50/10">
            <div className="border-2 flex flex-col justify-center   max-w-md w-full mx-auto p-8 space-y-4 rounded-xl dark:bg-zinc-950/30 dark:border-zinc-900 bg-zinc-50 border-zinc-100  shadow-[0_0_6px_rgba(220,220,220,0.1)] ">
@@ -84,7 +99,12 @@ export const RegisterPage= ()=>{
                     </div>
                 </div>
                 <div className="w-full  ">
-                   <button className="w-full rounded-md bg-primary text-primary-foreground font-sans py-2 transition hover:bg-primary/90 focus:outline-none focus:ring-0 cursor-pointer font-semibold">Join the community</button>
+                   <button 
+                     onClick={(e) => handleRegister(e as unknown as React.FormEvent<HTMLFormElement>)}
+                     disabled={laoding}
+                     className="w-full rounded-md bg-primary text-primary-foreground font-sans py-2 transition hover:bg-primary/90 focus:outline-none focus:ring-0 cursor-pointer font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
+                     {laoding ? "Joining..." : "Join the community"}
+                   </button>
 
                 </div>
 
@@ -94,9 +114,11 @@ export const RegisterPage= ()=>{
                     <div className="h-px  rounded flex-1 dark:bg-neutral-700 bg-neutral-300"></div>
                 </div>
                 <div className=" flex gap-2 justify-center items-center">
-                 <button  className="rounded-md border-[1.5px] dark:border-neutral-800 dark:bg-neutral-900 shadow-[inset_1px_2px_4px_rgba(220,220,220,0.5)] bg-slate-50 border-slate-50 flex justify-center items-center  py-2 px-4   dark:shadow-[inset_1px_3px_6px_rgba(45,45,50,0.5)] transition-all duration-300 gap-2  cursor-pointer dark:hover:bg-neutral-900/80  w-1/2 ">
+                 <button 
+                  onClick={GoogleSetup}
+                 className="rounded-md border-[1.5px] dark:border-neutral-800 dark:bg-neutral-900 shadow-[inset_1px_2px_4px_rgba(220,220,220,0.5)] bg-slate-50 border-slate-50 flex justify-center items-center  py-2 px-4   dark:shadow-[inset_1px_3px_6px_rgba(45,45,50,0.5)] transition-all duration-300 gap-2  cursor-pointer dark:hover:bg-neutral-900/80  w-1/2 ">
                 <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-                <g fill="none" fill-rule="evenodd" clip-rule="evenodd">
+                <g fill="none" fillRule="evenodd" clipRule="evenodd">
                 <path fill="#F44336" d="M7.209 1.061c.725-.081 1.154-.081 1.933 0a6.57 6.57 0 0 1 3.65 1.82a100 100 0 0 0-1.986 1.93q-1.876-1.59-4.188-.734q-1.696.78-2.362 2.528a78 78 0 0 1-2.148-1.658a.26.26 0 0 0-.16-.027q1.683-3.245 5.26-3.86" opacity=".987"/>
                 <path fill="#FFC107" d="M1.946 4.92q.085-.013.161.027a78 78 0 0 0 2.148 1.658A7.6 7.6 0 0 0 4.04 7.99q.037.678.215 1.331L2 11.116Q.527 8.038 1.946 4.92" opacity=".997"/>
                 <path fill="#448AFF" d="M12.685 13.29a26 26 0 0 0-2.202-1.74q1.15-.812 1.396-2.228H8.122V6.713q3.25-.027 6.497.055q.616 3.345-1.423 6.032a7 7 0 0 1-.51.49" opacity=".999"/>
