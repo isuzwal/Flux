@@ -3,7 +3,7 @@ import Link from "next/link"
 
 import {  LockIcon, MailIcon } from "lucide-react"
 import { useState } from "react"
-// import { authClient } from "@/lib/client"
+import { LoginGoogle } from "@/lib/client"
 
 
 
@@ -82,18 +82,21 @@ export const LoginPage= ()=>{
                     <span className="text-neutral-500 text-sm font-semibold">or</span>
                     <div className="h-px  rounded flex-1 dark:bg-neutral-700 bg-neutral-300"></div>
                 </div>
-                <div className=" flex gap-2 justify-center items-center">
-                 <button  className="rounded-md border-[1.5px] dark:border-neutral-800 dark:bg-neutral-900 shadow-[inset_1px_2px_4px_rgba(220,220,220,0.5)] bg-slate-50 border-slate-50 flex justify-center items-center  py-2 px-4   dark:shadow-[inset_1px_3px_6px_rgba(45,45,50,0.5)] transition-all duration-300 gap-2  cursor-pointer dark:hover:bg-neutral-900/80  w-1/2 ">
-                <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-                <g fill="none" fillRule="evenodd" clipRule="evenodd">
-                <path fill="#F44336" d="M7.209 1.061c.725-.081 1.154-.081 1.933 0a6.57 6.57 0 0 1 3.65 1.82a100 100 0 0 0-1.986 1.93q-1.876-1.59-4.188-.734q-1.696.78-2.362 2.528a78 78 0 0 1-2.148-1.658a.26.26 0 0 0-.16-.027q1.683-3.245 5.26-3.86" opacity=".987"/>
-                <path fill="#FFC107" d="M1.946 4.92q.085-.013.161.027a78 78 0 0 0 2.148 1.658A7.6 7.6 0 0 0 4.04 7.99q.037.678.215 1.331L2 11.116Q.527 8.038 1.946 4.92" opacity=".997"/>
-                <path fill="#448AFF" d="M12.685 13.29a26 26 0 0 0-2.202-1.74q1.15-.812 1.396-2.228H8.122V6.713q3.25-.027 6.497.055q.616 3.345-1.423 6.032a7 7 0 0 1-.51.49" opacity=".999"/>
-                <path fill="#43A047" d="M4.255 9.322q1.23 3.057 4.51 2.854a3.94 3.94 0 0 0 1.718-.626q1.148.812 2.202 1.74a6.62 6.62 0 0 1-4.027 1.684a6.4 6.4 0 0 1-1.02 0Q3.82 14.524 2 11.116z" opacity=".993"/>
-              </g>
-             </svg>
-             <span className="text-md font-semibold font-sans dark:text-neutral-400 text-neutral-700">Google </span>
-            </button>
+                                <div className=" flex gap-2 justify-center items-center">
+                                 <button
+                                     onClick={LoginGoogle}
+                                     className="rounded-md border-[1.5px] dark:border-neutral-800 dark:bg-neutral-900 shadow-[inset_1px_2px_4px_rgba(220,220,220,0.5)] bg-slate-50 border-slate-50 flex justify-center items-center  py-2 px-4   dark:shadow-[inset_1px_3px_6px_rgba(45,45,50,0.5)] transition-all duration-300 gap-2  cursor-pointer dark:hover:bg-neutral-900/80  w-1/2 "
+                                 >
+                                    <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                        <g fill="none" fillRule="evenodd" clipRule="evenodd">
+                                            <path fill="#F44336" d="M7.209 1.061c.725-.081 1.154-.081 1.933 0a6.57 6.57 0 0 1 3.65 1.82a100 100 0 0 0-1.986 1.93q-1.876-1.59-4.188-.734q-1.696.78-2.362 2.528a78 78 0 0 1-2.148-1.658a.26.26 0 0 0-.16-.027q1.683-3.245 5.26-3.86" opacity=".987"/>
+                                            <path fill="#FFC107" d="M1.946 4.92q.085-.013.161.027a78 78 0 0 0 2.148 1.658A7.6 7.6 0 0 0 4.04 7.99q.037.678.215 1.331L2 11.116Q.527 8.038 1.946 4.92" opacity=".997"/>
+                                            <path fill="#448AFF" d="M12.685 13.29a26 26 0 0 0-2.202-1.74q1.15-.812 1.396-2.228H8.122V6.713q3.25-.027 6.497.055q.616 3.345-1.423 6.032a7 7 0 0 1-.51.49" opacity=".999"/>
+                                            <path fill="#43A047" d="M4.255 9.322q1.23 3.057 4.51 2.854a3.94 3.94 0 0 0 1.718-.626q1.148.812 2.202 1.74a6.62 6.62 0 0 1-4.027 1.684a6.4 6.4 0 0 1-1.02 0Q3.82 14.524 2 11.116z" opacity=".993"/>
+                                        </g>
+                                    </svg>
+                                    <span className="text-md font-semibold font-sans dark:text-neutral-400 text-neutral-700">Google </span>
+                                </button>
               <button disabled className="relative rounded-md border-[1.5px] dark:border-neutral-800 dark:bg-neutral-900 flex justify-center items-center py-2 px-4 dark:shadow-[inset_1px_3px_6px_rgba(45,45,50,0.5)] transition-all duration-300 gap-2 cursor-not-allowed dark:opacity-40 w-1/2 shadow-[inset_1px_2px_4px_rgba(220,220,220,0.5)] bg-slate-50 border-slate-50 opacity-90">
                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 432 416">
                <path fill="currentColor" d="M213.5 0q88.5 0 151 62.5T427 213q0 70-41 125.5T281 416q-14 2-14-11v-58q0-27-15-40q44-5 70.5-27t26.5-77q0-34-22-58q11-26-2-57q-18-5-58 22q-26-7-54-7t-53 7q-18-12-32.5-17.5T107 88h-6q-12 31-2 57q-22 24-22 58q0 55 27 77t70 27q-11 10-13 29q-42 18-62-18q-12-20-33-22q-2 0-4.5.5t-5 3.5t8.5 9q14 7 23 31q1 2 2 4.5t6.5 9.5t13 10.5T130 371t30-2v36q0 13-14 11q-64-22-105-77.5T0 213q0-88 62.5-150.5T213.5 0z"/>
