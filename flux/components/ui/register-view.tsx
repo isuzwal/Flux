@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 
-import { LockIcon, MailIcon, User } from "lucide-react";
+import { Loader, Lock, Mail, User } from "lucide-react";
 import { authClient, LoginGoogle } from "@/lib/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -12,12 +12,25 @@ export const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [laoding, setLoading] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const router = useRouter();
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
     setLoading(true);
     try {
+      if (!name.trim() || !email.trim() || !password || !confirmPassword) {
+        toast.error("Please fill in all fields.");
+        setLoading(false);
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        toast.error("Passwords do not match.");
+        setLoading(false);
+        return;
+      }
+
       const response = await authClient.signUp.email({
         name: name.trim(),
         email: email.trim(),
@@ -46,145 +59,211 @@ export const RegisterPage = () => {
     await LoginGoogle();
   };
   return (
-    <div className="min-h-screen w-full flex justify-center items-center">
-      <div className=" relative border min-h-screen flex items-center justify-center  bg-background p-4">
-        {/* Right side */}
-        <div className="border-2 border-neutral-900  grid grid-cols-2 justify-center   max-w-4xl  w-full mx-auto  space-y-4 p-1 ">
-          <div className=" flex justify-center flex-col gap-5 border">
-            <div className="flex flex-col items-center text-center gap-2">
-              <h1 className="font-semibold font-sans text-lg lg:text-xl tracking-tight">
-                Be part of the community
-              </h1>
-              <div className="flex items-center gap-1 text-muted-foreground text-sm">
-                <span>Connect and grow together</span>
-                <Link
-                  href="/login"
-                  className="text-primary text-xs underline underline-offset-4 hover:text-primary/80 transition"
-                >
-                  Login
-                </Link>
-              </div>
-            </div>
-            <div className="flex gap-2 flex-col ">
-              <div>
-                <label className="font-medium font-sans text-sm mb-2  border-[1.5px] dark:border-neutral-800 h-full w-full   flex gap-1 rounded-lg dark:bg-neutral-800/50 bg-white border-neutral-100 ">
-                  <User className="size-5 text-neutral-500 ml-3 mt-2" />
-                  <input
-                    value={name}
-                    type="text"
-                    onChange={(e) => setName(e.target.value)}
-                    className="  py-1.5 px-2 max-w-md w-full mx-auto  placeholder:text-neutral-500 font-medium text-[16px]  focus-visible:outline-none focus-visible:ring-0"
-                    placeholder="isuzwal"
-                  />
-                </label>
-              </div>
-              <div>
-                <label className="font-medium font-sans text-sm mb-2  border-[1.5px] dark:border-neutral-800 h-full w-full   flex gap-1 rounded-lg dark:bg-neutral-800/50 bg-white border-neutral-100 ">
-                  <MailIcon className="size-5 text-neutral-500 ml-3 mt-2" />
-                  <input
-                    value={email}
-                    type="text"
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="  py-1.5 px-2 max-w-md w-full mx-auto  placeholder:text-neutral-500 font-medium text-[16px]  focus-visible:outline-none focus-visible:ring-0"
-                    placeholder="uzwal@gamil.com"
-                  />
-                </label>
-              </div>
-              <div>
-                <label className="font-medium font-sans text-sm mb-2 border-[1.5px] dark:border-neutral-800   h-full w-full   flex gap-1 rounded-lg dark:bg-neutral-800/50 bg-white border-neutral-100 ">
-                  <LockIcon className="size-5 text-neutral-500 ml-3 mt-2" />
-                  <input
-                    value={password}
-                    type="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="  py-1.5 px-2 max-w-md w-full mx-auto  placeholder:text-neutral-500 font-medium text-[16px]  focus-visible:outline-none focus-visible:ring-0"
-                    placeholder="Password"
-                  />
-                </label>
-              </div>
-            </div>
-            <div className="w-full  ">
-              <button
-                onClick={(e) =>
-                  handleRegister(
-                    e as unknown as React.FormEvent<HTMLFormElement>
-                  )
-                }
-                disabled={laoding}
-                className="w-full rounded-md bg-primary text-primary-foreground font-sans py-2 transition hover:bg-primary/90 focus:outline-none focus:ring-0 cursor-pointer font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {laoding ? "Joining..." : "Join the community"}
-              </button>
-            </div>
+    <div className="min-h-screen w-full flex justify-center items-center p-1">
+      <div className=" border bg-white border-slate-200 dark:border-neutral-900 rounded-lg dark:bg-neutral-950 flex  gap-4 items-center justify-center max-w-md w-full mx-auto  p-4">
+        <RightSide
+          GoogleSetup={GoogleSetup}
+          handleRegister={handleRegister}
+          laoding={laoding}
+          name={name}
+          setName={setName}
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          confirmPassword={confirmPassword}
+          setConfirmPassword={setConfirmPassword}
+        />
+      </div>
+    </div>
+  );
+};
 
-            <div className="flex items-center gap-2 my-2">
-              <div className="h-px  rounded flex-1 dark:bg-neutral-700 bg-neutral-300"></div>
-              <span className="text-neutral-500 text-sm font-semibold">or</span>
-              <div className="h-px  rounded flex-1 dark:bg-neutral-700 bg-neutral-300"></div>
-            </div>
-            <div className=" flex gap-2 justify-center items-center">
-              <button
-                onClick={GoogleSetup}
-                className="rounded-md border-[1.5px] dark:border-neutral-800 dark:bg-neutral-900 shadow-[inset_1px_2px_4px_rgba(220,220,220,0.5)] bg-slate-50 border-slate-50 flex justify-center items-center  py-2 px-4   dark:shadow-[inset_1px_3px_6px_rgba(45,45,50,0.5)] transition-all duration-300 gap-2  cursor-pointer dark:hover:bg-neutral-900/80  w-1/2 "
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 16 16"
-                >
-                  <g fill="none" fillRule="evenodd" clipRule="evenodd">
-                    <path
-                      fill="#F44336"
-                      d="M7.209 1.061c.725-.081 1.154-.081 1.933 0a6.57 6.57 0 0 1 3.65 1.82a100 100 0 0 0-1.986 1.93q-1.876-1.59-4.188-.734q-1.696.78-2.362 2.528a78 78 0 0 1-2.148-1.658a.26.26 0 0 0-.16-.027q1.683-3.245 5.26-3.86"
-                      opacity=".987"
-                    />
-                    <path
-                      fill="#FFC107"
-                      d="M1.946 4.92q.085-.013.161.027a78 78 0 0 0 2.148 1.658A7.6 7.6 0 0 0 4.04 7.99q.037.678.215 1.331L2 11.116Q.527 8.038 1.946 4.92"
-                      opacity=".997"
-                    />
-                    <path
-                      fill="#448AFF"
-                      d="M12.685 13.29a26 26 0 0 0-2.202-1.74q1.15-.812 1.396-2.228H8.122V6.713q3.25-.027 6.497.055q.616 3.345-1.423 6.032a7 7 0 0 1-.51.49"
-                      opacity=".999"
-                    />
-                    <path
-                      fill="#43A047"
-                      d="M4.255 9.322q1.23 3.057 4.51 2.854a3.94 3.94 0 0 0 1.718-.626q1.148.812 2.202 1.74a6.62 6.62 0 0 1-4.027 1.684a6.4 6.4 0 0 1-1.02 0Q3.82 14.524 2 11.116z"
-                      opacity=".993"
-                    />
-                  </g>
-                </svg>
-                <span className="text-md font-semibold font-sans dark:text-neutral-400 text-neutral-700">
-                  Google{" "}
-                </span>
-              </button>
-              <button
-                disabled
-                className="relative rounded-md border-[1.5px] dark:border-neutral-800 dark:bg-neutral-900 flex justify-center items-center py-2 px-4 dark:shadow-[inset_1px_3px_6px_rgba(45,45,50,0.5)] transition-all duration-300 gap-2 cursor-not-allowed dark:opacity-40 w-1/2 shadow-[inset_1px_2px_4px_rgba(220,220,220,0.5)] bg-slate-50 border-slate-50 opacity-90"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 432 416"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M213.5 0q88.5 0 151 62.5T427 213q0 70-41 125.5T281 416q-14 2-14-11v-58q0-27-15-40q44-5 70.5-27t26.5-77q0-34-22-58q11-26-2-57q-18-5-58 22q-26-7-54-7t-53 7q-18-12-32.5-17.5T107 88h-6q-12 31-2 57q-22 24-22 58q0 55 27 77t70 27q-11 10-13 29q-42 18-62-18q-12-20-33-22q-2 0-4.5.5t-5 3.5t8.5 9q14 7 23 31q1 2 2 4.5t6.5 9.5t13 10.5T130 371t30-2v36q0 13-14 11q-64-22-105-77.5T0 213q0-88 62.5-150.5T213.5 0z"
-                  />
-                </svg>
-                <span className="absolute text-[8px] z-30 top-1 left-1 font-sans font-semibold px-1 rounded-md bg-red-500 drop-shadow-[0_0_3px_#ef4444] text-neutral-100">
-                  Soon
-                </span>
-                <span className="text-md font-semibold font-sans dark:text-neutral-400 text-neutral-700">
-                  Github{" "}
-                </span>
-              </button>
+interface RightSideProps {
+  GoogleSetup: () => Promise<void>;
+  handleRegister: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  laoding: boolean;
+  name: string;
+  setName: React.Dispatch<React.SetStateAction<string>>;
+  email: string;
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
+  password: string;
+  setPassword: React.Dispatch<React.SetStateAction<string>>;
+  confirmPassword: string;
+  setConfirmPassword: React.Dispatch<React.SetStateAction<string>>;
+}
+const RightSide = ({
+  GoogleSetup,
+  handleRegister,
+  laoding,
+  name,
+  setName,
+  email,
+  setEmail,
+  password,
+  setPassword,
+  confirmPassword,
+  setConfirmPassword,
+}: RightSideProps) => {
+  return (
+    <div className="  w-full flex-1 flex flex-col gap-2   ">
+      <div>
+        <h2 className="text-2xl font-bold text-slate-900">
+          Create your account
+        </h2>
+        <p className="text-slate-500 text-sm">
+          Join over 10,000+ creators building on Flux
+        </p>
+      </div>
+      <div className="w-full">
+        <button
+          onClick={GoogleSetup}
+          className="rounded-md border-[1.5px] dark:border-neutral-800 dark:bg-neutral-900 bg-white
+         flex items-center justify-center
+          border-slate-200
+          
+          hover:bg-slate-50
+          hover:border-slate-300
+         
+          py-2 px-4   dark:shadow-[inset_1px_3px_6px_rgba(45,45,50,0.5)] transition-all duration-300 gap-2  cursor-pointer dark:hover:bg-neutral-900/80  w-full "
+        >
+          <svg
+            width="20"
+            height="20"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+          >
+            <g fill="none" fillRule="evenodd" clipRule="evenodd">
+              <path
+                fill="#F44336"
+                d="M7.209 1.061c.725-.081 1.154-.081 1.933 0a6.57 6.57 0 0 1 3.65 1.82a100 100 0 0 0-1.986 1.93q-1.876-1.59-4.188-.734q-1.696.78-2.362 2.528a78 78 0 0 1-2.148-1.658a.26.26 0 0 0-.16-.027q1.683-3.245 5.26-3.86"
+                opacity=".987"
+              />
+              <path
+                fill="#FFC107"
+                d="M1.946 4.92q.085-.013.161.027a78 78 0 0 0 2.148 1.658A7.6 7.6 0 0 0 4.04 7.99q.037.678.215 1.331L2 11.116Q.527 8.038 1.946 4.92"
+                opacity=".997"
+              />
+              <path
+                fill="#448AFF"
+                d="M12.685 13.29a26 26 0 0 0-2.202-1.74q1.15-.812 1.396-2.228H8.122V6.713q3.25-.027 6.497.055q.616 3.345-1.423 6.032a7 7 0 0 1-.51.49"
+                opacity=".999"
+              />
+              <path
+                fill="#43A047"
+                d="M4.255 9.322q1.23 3.057 4.51 2.854a3.94 3.94 0 0 0 1.718-.626q1.148.812 2.202 1.74a6.62 6.62 0 0 1-4.027 1.684a6.4 6.4 0 0 1-1.02 0Q3.82 14.524 2 11.116z"
+                opacity=".993"
+              />
+            </g>
+          </svg>
+          <span className="text-[14px] font-medium font-sans  dark:text-neutral-400 text-neutral-700">
+            Continue with Google{" "}
+          </span>
+        </button>
+      </div>
+      <div className="flex items-center gap-2 my-2">
+        <div className="h-px  rounded flex-1 dark:bg-neutral-700 bg-neutral-300"></div>
+        <span className="text-neutral-500 text-sm font-sans">
+          or join via email
+        </span>
+        <div className="h-px  rounded flex-1 dark:bg-neutral-700 bg-neutral-300"></div>
+      </div>
+      <div>
+        <form className="flex flex-col gap-2 ">
+          <div className="flex flex-col ">
+            <h1 className="font-semibold px-1 font-sans  text-[14px]">Email</h1>
+            <div>
+              <label className="font-medium font-sans text-sm mb-2  border-[1.5px] dark:border-neutral-800 h-full w-full   flex gap-1 rounded-lg dark:bg-neutral-800/50 bg-slate-50/50  border-slate-200 focus-within:border-green-400 focus-within:ring-1 focus-within:ring-green-400/50 transition-colors">
+                <Mail className="size-5 text-neutral-500 ml-3 mt-2" />
+                <input
+                  value={email}
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="  py-1.5 px-2 max-w-md w-full mx-auto  placeholder:text-neutral-500 font-medium text-[16px]  focus-visible:outline-none focus-visible:ring-0"
+                  placeholder="johondoe@email.com"
+                />
+              </label>
             </div>
           </div>
-        </div>
+          <div className="flex flex-col ">
+            <h1 className="font-semibold  px-1 font-sans  text-[14px]">Name</h1>
+            <div>
+              <label className="font-medium font-sans text-sm mb-2  border-[1.5px] dark:border-neutral-800 h-full w-full   flex gap-1 rounded-lg dark:bg-neutral-800/50 bg-slate-50/50  border-slate-200 focus-within:border-green-400 focus-within:ring-1 focus-within:ring-green-400/50 transition-colors">
+                <User className="size-5 text-neutral-500 ml-3 mt-2" />
+                <input
+                  value={name}
+                  type="text"
+                  onChange={(e) => setName(e.target.value)}
+                  className="  py-1.5 px-2 max-w-md w-full mx-auto  placeholder:text-neutral-500 font-medium text-[16px]  focus-visible:outline-none focus-visible:ring-0"
+                  placeholder="John Doe"
+                />
+              </label>
+            </div>
+          </div>
+          <div className="flex flex-col ">
+            <h1 className="font-semibold px-1 font-sans  text-[14px]">
+              Password
+            </h1>
+            <div>
+              <label className="font-medium font-sans text-sm mb-2  border-[1.5px] dark:border-neutral-800 h-full w-full   flex gap-1 rounded-lg dark:bg-neutral-800/50  bg-slate-50/50  border-slate-200 focus-within:border-green-400 focus-within:ring-1 focus-within:ring-green-400/50 transition-colors">
+                <Lock className="size-5 text-neutral-500 ml-3 mt-2" />
+                <input
+                  value={password}
+                  type="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="  py-1.5 px-2 max-w-md w-full mx-auto placeholder:font-semibold   placeholder:text-neutral-500 font-medium text-[16px]  focus-visible:outline-none focus-visible:ring-0"
+                  placeholder="......."
+                />
+              </label>
+            </div>
+          </div>
+          <div className="flex flex-col ">
+            <h1 className="font-semibold  px-1 font-sans  text-[14px]">
+              Confirm Password
+            </h1>
+            <div>
+              <label className="font-medium font-sans text-sm mb-2  border-[1.5px] dark:border-neutral-800 h-full w-full placeholder:font-semibold   flex gap-1 rounded-lg dark:bg-neutral-800/50  bg-slate-50/50  border-slate-200 focus-within:border-green-400 focus-within:ring-1 focus-within:ring-green-400/50 transition-colors">
+                <Lock className="size-5 text-neutral-500 ml-3 mt-2" />
+                <input
+                  value={confirmPassword}
+                  type="password"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="  py-1.5 px-2 max-w-md w-full mx-auto  placeholder:text-neutral-500 placeholder:font-semibold font-medium flex items-center  justify-center text-[16px]  focus-visible:outline-none focus-visible:ring-0"
+                  placeholder="......."
+                />
+              </label>
+            </div>
+            <p className="text-[11px] text-slate-400 ml-1">
+              Must be at least 8 characters long
+            </p>
+          </div>
+          <button
+            type="submit"
+            onClick={(e) =>
+              handleRegister(e as unknown as React.FormEvent<HTMLFormElement>)
+            }
+            disabled={laoding}
+            className="rounded-md p-1 text-neutral-50 font-semibold   bg-green-500 hover:bg-green-600  cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {laoding ? (
+              <p className="flex items-center justify-between">
+                <Loader className="animate-spin size-5 mx-auto" />
+                Creating your account...
+              </p>
+            ) : (
+              "Create Account"
+            )}
+          </button>
+          <p className="text-center text-sm text-slate-500 pt-2">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="text-green-600 font-semibold hover:text-green-700 transition-colors"
+            >
+              Log in
+            </Link>
+          </p>
+        </form>
       </div>
     </div>
   );

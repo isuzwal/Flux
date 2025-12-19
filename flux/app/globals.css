@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Italianno&family=Outfit:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -49,7 +52,7 @@
   --card-foreground: oklch(0.1591 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.1591 0 0);
-  --primary: oklch(0.6582 0.169 248.8135);
+  --primary: oklch(0.7191 0.1931 147.07);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.9551 0 0);
   --secondary-foreground: oklch(0.1591 0 0);
@@ -61,20 +64,20 @@
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.9067 0 0);
   --input: oklch(0.9702 0 0);
-  --ring: oklch(0.6582 0.169 248.8135);
-  --chart-1: oklch(0.6582 0.169 248.8135);
+  --ring: oklch(0.7191 0.1931 147.07);
+  --chart-1: oklch(0.7191 0.1931 147.07);
   --chart-2: oklch(0.7482 0.1235 244.7492);
   --chart-3: oklch(0.8163 0.0896 243.619);
   --chart-4: oklch(0.8848 0.0546 243.3882);
   --chart-5: oklch(0.9532 0.0218 239.4275);
   --sidebar: oklch(0.9702 0 0);
   --sidebar-foreground: oklch(0.1591 0 0);
-  --sidebar-primary: oklch(0.6582 0.169 248.8135);
+  --sidebar-primary: oklch(0.7191 0.1931 147.07);
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.9067 0 0);
   --sidebar-accent-foreground: oklch(0.1591 0 0);
   --sidebar-border: oklch(0.9067 0 0);
-  --sidebar-ring: oklch(0.6582 0.169 248.8135);
+  --sidebar-ring: oklch(0.7191 0.1931 147.07);
   --font-sans: "Inter", sans-serif;
   --font-serif: "Lora", serif;
   --font-mono: "Fira Code", monospace;
@@ -122,20 +125,20 @@
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.3485 0 0);
   --input: oklch(0.2931 0 0);
-  --ring: oklch(0.6582 0.169 248.8135);
-  --chart-1: oklch(0.6582 0.169 248.8135);
+  --ring: oklch(0.7191 0.1931 147.07);
+  --chart-1: oklch(0.7191 0.1931 147.07);
   --chart-2: oklch(0.7482 0.1235 244.7492);
   --chart-3: oklch(0.8163 0.0896 243.619);
   --chart-4: oklch(0.8848 0.0546 243.3882);
   --chart-5: oklch(0.9532 0.0218 239.4275);
   --sidebar: oklch(0.2931 0 0);
   --sidebar-foreground: oklch(0.9067 0 0);
-  --sidebar-primary: oklch(0.6582 0.169 248.8135);
+  --sidebar-primary: oklch(0.7191 0.1931 147.07);
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.3485 0 0);
   --sidebar-accent-foreground: oklch(0.9067 0 0);
   --sidebar-border: oklch(0.3485 0 0);
-  --sidebar-ring: oklch(0.6582 0.169 248.8135);
+  --sidebar-ring: oklch(0.7191 0.1931 147.07);
   --font-sans: "Inter", sans-serif;
   --font-serif: "Lora", serif;
   --font-mono: "Fira Code", monospace;
@@ -221,16 +224,8 @@
     @apply bg-background text-foreground;
   }
 }
-
-.glass {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+@layer utilities {
+  .font-italiana {
+    font-family: var(--font-italiana), cursive;
+  }
 }
-.gradient-bg {
-  background: linear-gradient(135deg, #064e3b 0%, #10b981 100%);
-}
-/* .gradient {
-  background: linear-gradient(135deg, #0e261b 0%, #064e3b 100%);
-} */
