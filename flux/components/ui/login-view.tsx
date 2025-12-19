@@ -97,13 +97,7 @@ export const LoginPage= ()=>{
                                     </svg>
                                     <span className="text-md font-semibold font-sans dark:text-neutral-400 text-neutral-700">Google </span>
                                 </button>
-              <button disabled className="relative rounded-md border-[1.5px] dark:border-neutral-800 dark:bg-neutral-900 flex justify-center items-center py-2 px-4 dark:shadow-[inset_1px_3px_6px_rgba(45,45,50,0.5)] transition-all duration-300 gap-2 cursor-not-allowed dark:opacity-40 w-1/2 shadow-[inset_1px_2px_4px_rgba(220,220,220,0.5)] bg-slate-50 border-slate-50 opacity-90">
-               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 432 416">
-               <path fill="currentColor" d="M213.5 0q88.5 0 151 62.5T427 213q0 70-41 125.5T281 416q-14 2-14-11v-58q0-27-15-40q44-5 70.5-27t26.5-77q0-34-22-58q11-26-2-57q-18-5-58 22q-26-7-54-7t-53 7q-18-12-32.5-17.5T107 88h-6q-12 31-2 57q-22 24-22 58q0 55 27 77t70 27q-11 10-13 29q-42 18-62-18q-12-20-33-22q-2 0-4.5.5t-5 3.5t8.5 9q14 7 23 31q1 2 2 4.5t6.5 9.5t13 10.5T130 371t30-2v36q0 13-14 11q-64-22-105-77.5T0 213q0-88 62.5-150.5T213.5 0z"/>
-               </svg>
-               <span className="absolute text-[8px] z-30 top-1 left-1 font-sans font-semibold px-1 rounded-md bg-red-500 drop-shadow-[0_0_3px_#ef4444] text-neutral-100">Soon</span>
-              <span className="text-md font-semibold font-sans dark:text-neutral-400 text-neutral-700">Github </span>
-            </button>
+       
                    
         
                 </div>

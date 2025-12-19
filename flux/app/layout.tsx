@@ -27,15 +27,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-zinc-900 bg-neutral-50/10`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-black bg-neutral-50`}
       >
-        <ThemeProvider attribute="class"
-        defaultTheme="light"
-        enableSystem
-        disableTransitionOnChange
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
         >
-        {children}
-        <Toaster />
+          {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
