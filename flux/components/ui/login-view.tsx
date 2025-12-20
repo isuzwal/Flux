@@ -7,6 +7,7 @@ import { Loader, Lock, Mail } from "lucide-react";
 import { authClient } from "@/lib/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { EmailValidationAction } from "@/lib/action";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -31,7 +32,16 @@ export const LoginPage = () => {
         setLoading(false);
         return;
       }
+      // validate email exists
+      const { exists } = await EmailValidationAction(email);
 
+      if (exists) {
+        toast.error(
+          "Email is already registered. Please use a different email."
+        );
+        setLoading(false);
+        return;
+      }
       const response = await authClient.signIn.email({
         email: email.trim(),
         password: password,
@@ -106,7 +116,7 @@ const RightSide = ({
     <div className="  w-full flex-1 flex flex-col gap-2   ">
       <div>
         <h2 className="text-2xl font-bold text-slate-900">
-          Create your account
+          Welcome back to Flux
         </h2>
         <p className="text-slate-500 text-sm">
           Join over 10,000+ creators building on Flux
@@ -227,9 +237,9 @@ const RightSide = ({
             className="rounded-md p-1 text-neutral-50 font-semibold   bg-green-500 hover:bg-green-600  cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {laoding ? (
-              <p className="flex items-center justify-between">
-                Login to account...
-                <Loader className="animate-spin size-5 mx-auto" />
+              <p className="flex items-center justify-center gap-2">
+                Login to account
+                <Loader className="animate-spin size-4 " />
               </p>
             ) : (
               "Login "

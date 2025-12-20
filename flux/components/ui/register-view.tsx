@@ -6,6 +6,7 @@ import { authClient, LoginGoogle } from "@/lib/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { EmailValidationAction } from "@/lib/action";
 
 export const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -30,7 +31,16 @@ export const RegisterPage = () => {
         setLoading(false);
         return;
       }
+      // check  email is already presnt ?
+      const { exists } = await EmailValidationAction(email);
 
+      if (exists) {
+        toast.error(
+          "Email is already registered.Please use a different email."
+        );
+        setLoading(false);
+        return;
+      }
       const response = await authClient.signUp.email({
         name: name.trim(),
         email: email.trim(),
@@ -246,9 +256,9 @@ const RightSide = ({
             className="rounded-md p-1 text-neutral-50 font-semibold   bg-green-500 hover:bg-green-600  cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {laoding ? (
-              <p className="flex items-center justify-between">
-                <Loader className="animate-spin size-5 mx-auto" />
-                Creating your account...
+              <p className="flex  items-center gap-2  justify-center">
+                <span className="">Creating your account</span>
+                <Loader className="animate-spin size-4" />
               </p>
             ) : (
               "Create Account"

@@ -39,7 +39,15 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
-          <Toaster />
+          <Toaster 
+          richColors
+          toastOptions={{
+            classNames: {
+            success: 'bg-green-500 text-white border-green-600 shadow-lg shadow-green-500/50', 
+            error: 'bg-red-500 text-white border-red-600 shadow-lg shadow-red-500/50',
+            },
+          }}
+          />
         </ThemeProvider>
       </body>
     </html>
