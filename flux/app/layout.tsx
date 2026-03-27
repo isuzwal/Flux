@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import { Geist_Mono } from "next/font/google";
+import { Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const InterVar = Inter({
+  variable: "--font-inter",
 });
-
 export const metadata: Metadata = {
   title: "Enops - Design better database scheam ",
   description: "A platform to share and discover products.",
@@ -20,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={` ${geistMono.variable}   antialiased dark:bg-black bg-neutral-50`}
+        className={`  ${InterVar.variable}   antialiased dark:bg-black bg-neutral-50`}
       >
         {children}
       </body>
