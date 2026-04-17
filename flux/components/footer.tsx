@@ -24,7 +24,7 @@ export const Footer = () => {
               enops.dev
             </Link>
           </div>
-          <p className=" max-w-xs  w-full  text-left text-foreground/80 font-sans text-[14px]">
+          <p className=" max-w-xs  w-full  text-left text-foreground/80 font-sans text-[12px]">
             An AI-powered platform to design, visualize, optimize, and export
             database schemas
           </p>
@@ -33,17 +33,23 @@ export const Footer = () => {
           <h1 className="text-primary font-sans text-[14px] ">/NAVIGATION/</h1>
           <div
             className="  flex  flex-col  justify-start items-start
-              w-full  sm:w-[6rem]   gap-4"
+              w-full  sm:w-[6rem]   gap-3"
           >
             <Link
-              href="#"
-              className=" text-sm font-sans text-foreground leading-none"
+              href="#features"
+              className=" text-xs font-sans  font-medium text-foreground/80 leading-none"
+            >
+              Features
+            </Link>
+            <Link
+              href="#faq"
+              className=" text-xs  font-medium font-sans text-foreground/80  leading-none"
             >
               FAQ
             </Link>
             <Link
-              href="#"
-              className=" text-sm font-sans text-foreground leading-0"
+              href="#pricing"
+              className=" text-xs font-sans   font-medium  text-foreground/80 leading-0"
             >
               Pricing
             </Link>
@@ -56,14 +62,14 @@ export const Footer = () => {
              w-full  sm:w-[6rem]   gap-4"
           >
             <Link
-              href="#"
-              className=" text-sm font-sans text-foreground leading-none"
+              href="#pricing"
+              className="text-xs font-sans   font-medium  text-foreground/80  leading-none"
             >
               Privacy Policy
             </Link>
             <Link
               href="#"
-              className=" text-sm font-sans text-foreground leading-0"
+              className=" text-xs font-sans   font-medium  text-foreground/80 leading-0"
             >
               404 Page
             </Link>
@@ -77,9 +83,10 @@ export const Footer = () => {
           >
             <Link
               href="#"
-              className=" text-sm font-sans text-foreground leading-0"
+              className="  flex  items-center text-xs    text-foreground/80  gap-1 font-sans  font-medium leading-0"
             >
-              <Twitter className="size-4.5 text-foreground/80" />
+              <Twitter className="size-4 fill-primary text-primary " />{" "}
+              <span>Twitter</span>
             </Link>
           </div>
         </div>
