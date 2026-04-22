@@ -1,11 +1,30 @@
+"use client";
 import { Twitter } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-
+import { motion } from "motion/react";
 export const Footer = () => {
   return (
     <div className=" py-8 px-2 w-full">
-      <div className="w-full grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      <motion.div
+        viewport={{ once: true, amount: 0.2 }}
+        initial={{
+          opacity: 0,
+          y: 10,
+          filter: "blur(8px)",
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+        }}
+        transition={{
+          duration: 0.3,
+          delay: 0.3,
+          ease: "easeOut",
+        }}
+        className="w-full grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-4"
+      >
         <div className="">
           <div className="flex items-center gap-1">
             <div className=" relative overflow-hidden h-6 w-6">
@@ -90,7 +109,7 @@ export const Footer = () => {
             </Link>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

@@ -1,8 +1,9 @@
 "use client";
 import { Github } from "lucide-react";
-import { animate, hover, motion, useAnimation } from "motion/react";
+import { motion, useAnimation, Variants } from "motion/react";
 
 export const Features = () => {
+  const controls = useAnimation();
   const handleHoverStart = () => {
     controls.start({
       rotate: 360,
@@ -25,26 +26,78 @@ export const Features = () => {
     });
     controls.set({ rotate: 0 });
   };
-  const controls = useAnimation();
+
+  const MainAnimation: Variants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.18,
+      },
+    },
+  };
+  const itemVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: 10,
+      filter: "blur(10px)",
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: {
+        duration: 0.4,
+        ease: "easeOut",
+      },
+    },
+  };
   return (
-    <section id="features" className=" w-full py-12  px-1 scroll-padding-top ">
-      <div className="w-full  flex  flex-col  gap-0.5 justify-start">
+    <motion.section
+      id="features"
+      className=" w-full py-12  px-1 scroll-padding-top "
+    >
+      <motion.div
+        viewport={{ once: true, amount: 0.2 }}
+        initial={{
+          opacity: 0,
+          y: 10,
+          filter: "blur(8px)",
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+        }}
+        transition={{
+          duration: 0.3,
+          delay: 0.3,
+          ease: "easeOut",
+        }}
+        className="w-full  flex  flex-col  gap-0.5 justify-start"
+      >
         <h1 className="text-3xl lg:text-4xl font-sans font-extrabold text-start">
           Why Enops?
         </h1>
         <p className="text-sm text-foreground/80 text-start leading-normal font-medium">
           Build for modern development workflows
         </p>
-      </div>
-      <div className=" py-2  mt-4 gap-1  grid grid-cols-1 sm:grid-cols-2   lg:grid-cols-4 w-full ">
+      </motion.div>
+      <motion.div
+        variants={MainAnimation}
+        initial="hidden"
+        whileInView="show"
+        className=" py-2  mt-4 gap-1  grid grid-cols-1 sm:grid-cols-2   lg:grid-cols-4 w-full "
+      >
         <motion.div
           whileHover="hovered"
           initial="initial"
+          variants={itemVariants}
           className="border group hover:bg-neutral-100/40 duration-300 ease-in-out transition-all border-neutral-300 border-dashed"
         >
           <div className="p-2">
             <span className="text-primary font-sans font-medium text-sm">
-              /006/
+              /001/
             </span>
           </div>
 
@@ -317,6 +370,7 @@ export const Features = () => {
         </motion.div>
         {/*Second */}
         <motion.div
+          variants={itemVariants}
           whileHover="hovered"
           initial="initial"
           className="border group hover:bg-neutral-100/40 duration-300 ease-in-out transition-all border-neutral-300 border-dashed"
@@ -465,6 +519,7 @@ export const Features = () => {
         </motion.div>
         {/*Third */}
         <motion.div
+          variants={itemVariants}
           whileHover="animate"
           initial="initial"
           className=" border group hover:bg-neutral-100/40 duration-300 ease-in-out  transition-all border-neutral-300 border-dashed"
@@ -553,6 +608,7 @@ export const Features = () => {
         </motion.div>
         {/*Fourth */}
         <motion.div
+          variants={itemVariants}
           animate="animate"
           initial="initial"
           onHoverStart={handleHoverStart}
@@ -614,11 +670,29 @@ export const Features = () => {
             </p>
           </div>
         </motion.div>
-      </div>
+      </motion.div>
 
       {/*Works*/}
 
-      <div className="w-full  mt-12 py-32   flex flex-col items-center gap-3.5 justify-center">
+      <motion.div
+        viewport={{ once: true, amount: 0.2 }}
+        initial={{
+          opacity: 0,
+          y: 10,
+          filter: "blur(8px)",
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+        }}
+        transition={{
+          duration: 0.3,
+          delay: 0.3,
+          ease: "easeOut",
+        }}
+        className="w-full  mt-12 py-32   flex flex-col items-center gap-3.5 justify-center"
+      >
         <div className=" max-w-xl ">
           <h2 className=" tracking-tight text-3xl  lg:text-4xl text-center font-bold font-sans leading-normal">
             Open Source & Community Drive
@@ -636,7 +710,7 @@ export const Features = () => {
             </button>
           </div>
         </div>
-      </div>
-    </section>
+      </motion.div>
+    </motion.section>
   );
 };

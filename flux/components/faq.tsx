@@ -1,17 +1,36 @@
+"use client";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
-
+import { motion } from "motion/react";
 export const FAQ = () => {
   return (
     <div
       id="faq"
       className="w-full  px-1  flex md:flex-row  flex-col justify-between gap-4 py-6"
     >
-      <div className=" flex flex-col  py-2 ">
+      <motion.div
+        viewport={{ once: true, amount: 0.2 }}
+        initial={{
+          opacity: 0,
+          y: 10,
+          filter: "blur(8px)",
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+        }}
+        transition={{
+          duration: 0.3,
+          delay: 0.3,
+          ease: "easeOut",
+        }}
+        className=" flex flex-col  py-2 "
+      >
         <h1
           className="text-3xl lg:text-4xl font-sans font-extrabold leading-noraml
         "
@@ -22,9 +41,27 @@ export const FAQ = () => {
           Got questions? We&apos;ve got answers.if you can&apos;t find what
           your&apos;re looking for, feel free to reach out.
         </p>
-      </div>
+      </motion.div>
 
-      <div className=" flex-1 py-4  ">
+      <motion.div
+        viewport={{ once: true, amount: 0.2 }}
+        initial={{
+          opacity: 0,
+          y: 10,
+          filter: "blur(8px)",
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+        }}
+        transition={{
+          duration: 0.3,
+          delay: 0.3,
+          ease: "easeOut",
+        }}
+        className=" flex-1 py-4  "
+      >
         <Accordion
           type="single"
           collapsible
@@ -77,7 +114,7 @@ export const FAQ = () => {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-      </div>
+      </motion.div>
     </div>
   );
 };
