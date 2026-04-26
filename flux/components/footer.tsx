@@ -48,13 +48,13 @@ export const Footer = () => {
             database schemas
           </p>
         </div>
-        <div className="  flex flex-col   items-center gap-0.5">
-          <h1 className="text-primary font-sans text-[14px]  flex  justify-start sm:justify-center w-full">
+        <div className="  flex flex-col   items-center gap-0.5 ">
+          <h1 className="text-primary font-sans text-[14px]  flex  justify-center sm:justify-center w-full">
             /NAVIGATION/
           </h1>
           <div
-            className="  flex  flex-col justify-start items-start
-              w-full  sm:w-[6rem]   gap-3"
+            className="  flex  flex-col justify-end  items-start
+              w-[6rem]   gap-2"
           >
             <Link
               href="#features"
@@ -76,13 +76,13 @@ export const Footer = () => {
             </Link>
           </div>
         </div>
-        <div className="   flex flex-col  items-center  gap-0.5">
-          <h1 className="text-primary font-sans text-[14px]  flex  justify-start md:justify-center w-full ">
+        <div className="   flex flex-col  items-center   gap-0.5">
+          <h1 className="text-primary font-sans text-[14px]  flex  justify-start lg:justify-center w-full ">
             /RESOURCES/
           </h1>
           <div
             className="  flex  flex-col  justify-start items-start
-             w-full  md:w-[6rem]   gap-4"
+             w-full  lg:w-[6rem]   gap-3"
           >
             <Link
               href="#pricing"
@@ -99,12 +99,12 @@ export const Footer = () => {
           </div>
         </div>
         <div className="  flex flex-col items-center gap-0.5">
-          <h1 className="text-primary font-sans text-[14px] flex  justify-start sm:justify-center w-full  ">
+          <h1 className="text-primary font-sans text-[14px]   flex  justify-center sm:justify-center w-full">
             /SOCIAL/
           </h1>
           <div
-            className="  flex  flex-col  justify-start items-start
-              w-full sm:w-[5rem]   gap-3"
+            className="  flex  flex-col  justify-center items-center 
+            w-[6rem]   gap-3"
           >
             <Link
               href="#"
