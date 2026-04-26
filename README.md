@@ -1,4 +1,4 @@
-# Flux Landing Page
+# Enops Landing Page
 
 A modern, AI-powered landing page for database schema design, built with Next.js, Tailwind CSS, and smooth animations.
 
